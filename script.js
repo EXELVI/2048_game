@@ -69,7 +69,155 @@ function updateScore() {
     document.getElementById('score').textContent = `Score: ${score}`;
 }
 
+function moveUp() {
+    let moved = false;
+    for (let j = 0; j < GRID_SIZE; j++) {
+        let currentRow = 0;
+        for (let i = 1; i < GRID_SIZE; i++) {
+            if (grid[i][j] !== 0) {
+                if (grid[currentRow][j] === 0) {
+                    grid[currentRow][j] = grid[i][j];
+                    grid[i][j] = 0;
+                    moved = true;
+                } else if (grid[currentRow][j] === grid[i][j]) {
+                    grid[currentRow][j] *= 2;
+                    score += grid[currentRow][j];
+                    grid[i][j] = 0;
+                    moved = true;
+                    currentRow++;
+                } else {
+                    currentRow++;
+                    if (currentRow !== i) {
+                        grid[currentRow][j] = grid[i][j];
+                        grid[i][j] = 0;
+                        moved = true;
+                    }
+                }
+            }
+        }
+    }
+    return moved;
+}
 
+function moveDown() {
+    let moved = false;
+    for (let j = 0; j < GRID_SIZE; j++) {
+        let currentRow = GRID_SIZE - 1;
+        for (let i = GRID_SIZE - 2; i >= 0; i--) {
+            if (grid[i][j] !== 0) {
+                if (grid[currentRow][j] === 0) {
+                    grid[currentRow][j] = grid[i][j];
+                    grid[i][j] = 0;
+                    moved = true;
+                } else if (grid[currentRow][j] === grid[i][j]) {
+                    grid[currentRow][j] *= 2;
+                    score += grid[currentRow][j];
+                    grid[i][j] = 0;
+                    moved = true;
+                    currentRow--;
+                } else {
+                    currentRow--;
+                    if (currentRow !== i) {
+                        grid[currentRow][j] = grid[i][j];
+                        grid[i][j] = 0;
+                        moved = true;
+                    }
+                }
+            }
+        }
+    }
+    return moved;
+}
+
+function moveLeft() {
+    let moved = false;
+    for (let i = 0; i < GRID_SIZE; i++) {
+        let currentCol = 0;
+        for (let j = 1; j < GRID_SIZE; j++) {
+            if (grid[i][j] !== 0) {
+                if (grid[i][currentCol] === 0) {
+                    grid[i][currentCol] = grid[i][j];
+                    grid[i][j] = 0;
+                    moved = true;
+                } else if (grid[i][currentCol] === grid[i][j]) {
+                    grid[i][currentCol] *= 2;
+                    score += grid[i][currentCol];
+                    grid[i][j] = 0;
+                    moved = true;
+                    currentCol++;
+                } else {
+                    currentCol++;
+                    if (currentCol !== j) {
+                        grid[i][currentCol] = grid[i][j];
+                        grid[i][j] = 0;
+                        moved = true;
+                    }
+                }
+            }
+        }
+    }
+    return moved;
+}
+
+function moveRight() {
+    let moved = false;
+    for (let i = 0; i < GRID_SIZE; i++) {
+        let currentCol = GRID_SIZE - 1;
+        for (let j = GRID_SIZE - 2; j >= 0; j--) {
+            if (grid[i][j] !== 0) {
+                if (grid[i][currentCol] === 0) {
+                    grid[i][currentCol] = grid[i][j];
+                    grid[i][j] = 0;
+                    moved = true;
+                } else if (grid[i][currentCol] === grid[i][j]) {
+                    grid[i][currentCol] *= 2;
+                    score += grid[i][currentCol];
+                    grid[i][j] = 0;
+                    moved = true;
+                    currentCol--;
+                } else {
+                    currentCol--;
+                    if (currentCol !== j) {
+                        grid[i][currentCol] = grid[i][j];
+                        grid[i][j] = 0;
+                        moved = true;
+                    }
+                }
+            }
+        }
+    }
+    return moved;
+}
+
+
+
+document.addEventListener('keydown', function(event) {
+    let moved = false;
+    switch (event.key) {
+        case 'ArrowUp':
+            event.preventDefault();
+            moved = moveUp();
+            break;
+        case 'ArrowDown':
+            event.preventDefault();
+            moved = moveDown();
+            break;
+        case 'ArrowLeft':
+            event.preventDefault();
+            moved = moveLeft();
+            break;
+        case 'ArrowRight':
+            event.preventDefault();
+            moved = moveRight();
+            break;
+    }
+    if (moved) {
+        addNewNumber();
+        updateGrid();
+        updateScore();
+    }
+
+});
 
 
 document.getElementById('new-game-btn').addEventListener('click', function() {
